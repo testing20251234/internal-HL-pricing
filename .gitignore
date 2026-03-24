@@ -1,0 +1,4 @@
+# Only allow the staff pricing page — block everything else
+*
+!.gitignore
+!index.html
