@@ -51,6 +51,13 @@
   }
   .stitle:first-child { margin-top: 0; }
 
+  .section-divider {
+    font-size: 0.85rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text); padding: 0.6rem 0; margin: 1.5rem 0 0.75rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-divider:first-child { margin-top: 0; }
+
   table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
   th {
     text-align: left; padding: 0.4rem 0.5rem; font-size: 0.58rem;
@@ -182,24 +189,21 @@
 
 <!-- ═══ PROMOTIONS ═══ -->
 <div class="section" id="promos">
-  <div class="stitle">Evergreen Packages</div>
+  <div class="section-divider">Evergreen Pricing</div>
 
   <div class="card gold">
-    <h3>Try Everything</h3>
-    <div class="card-price">$158</div>
-    <p>1 HBOT + 1 RLT + 2hr SBH entry. Swimsuits and towels provided.</p>
+    <h3>First Timer RLT Trial</h3>
+    <div class="card-price">$159</div>
+    <p>2 weeks unlimited Red Light Therapy. One purchase only per customer.</p>
+    <span class="tag tag-gold">First timers only</span>
+    <span class="tag tag-blue">2-week expiry</span>
   </div>
 
   <div class="card">
     <h3>First Timer HBOT Trial</h3>
     <div class="card-price" style="color:var(--accent)">$99</div>
     <p>1 HBOT session. One purchase only per customer.</p>
-  </div>
-
-  <div class="card">
-    <h3>SBH Trial</h3>
-    <div class="card-price" style="color:var(--accent)">$99</div>
-    <p>5 SBH sessions + 1 free RLT. 4-week expiry. One per customer.</p>
+    <span class="tag tag-blue">No expiry</span>
   </div>
 
   <div class="card purple">
@@ -207,6 +211,22 @@
     <div class="card-price" style="color:var(--purple)">$199</div>
     <p>1 HBOT session + 1 week of RLT (daily sessions).</p>
     <span class="tag" style="background:var(--purple-bg);color:var(--purple);border:1px solid rgba(154,122,186,0.3)">1-week expiry</span>
+  </div>
+
+  <div class="section-divider">Current Advertisements</div>
+
+  <div class="card" style="border-color:var(--gold-border);background:var(--gold-bg)">
+    <h3>Try Everything</h3>
+    <div class="card-price" style="color:var(--gold)">$158</div>
+    <p>1 HBOT + 1 RLT + 2hr SBH entry. Swimsuits and towels provided.</p>
+    <span class="tag tag-blue">No expiry</span>
+  </div>
+
+  <div class="card">
+    <h3>SBH Trial</h3>
+    <div class="card-price" style="color:var(--accent)">$99</div>
+    <p>5 SBH sessions + 1 free RLT. One per customer.</p>
+    <span class="tag tag-blue">4-week expiry</span>
   </div>
 
   <!-- INTERNAL PROMOTION ONLY -->
