@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HL + SBH — Staff Pricing</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --surface: #1a1d25; --surface2: #22252e;
+    --border: #2e3240; --text: #e8e4df; --dim: #9a9590;
+    --muted: #6b6560; --accent: #c4a882; --gold: #d4a74f;
+    --gold-bg: rgba(212,167,79,0.08); --gold-border: rgba(212,167,79,0.25);
+    --green: #6aab7a; --green-bg: rgba(106,171,122,0.08);
+    --blue: #6a9aba; --blue-bg: rgba(106,154,186,0.08);
+    --red: #ba6a6a; --red-bg: rgba(186,106,106,0.06);
+    --purple: #9a7aba; --purple-bg: rgba(154,122,186,0.08);
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 1rem 1rem 0.75rem; text-align: center; position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-size: 1.1rem; font-weight: 700; }
+  header .updated { font-size: 0.65rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs {
+    display: flex; overflow-x: auto; gap: 0; padding: 0.5rem 0 0;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0; padding: 0.5rem 0.75rem; border: none; background: none;
+    color: var(--muted); font-size: 0.68rem; font-weight: 600; cursor: pointer;
+    letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;
+    border-bottom: 2px solid transparent; transition: all 0.15s; font-family: inherit;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .section { display: none; padding: 1rem; max-width: 600px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .stitle {
+    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin: 1.25rem 0 0.5rem;
+  }
+  .stitle:first-child { margin-top: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  th {
+    text-align: left; padding: 0.4rem 0.5rem; font-size: 0.58rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    font-weight: 700; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.45rem 0.5rem; border-bottom: 1px solid rgba(46,50,64,0.5); }
+  tr.hl td { background: var(--gold-bg); }
+  tr.gl td { background: var(--green-bg); }
+  .price { font-weight: 700; color: var(--accent); }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem; margin: 0.75rem 0;
+  }
+  .card.gold { border-color: var(--gold-border); background: var(--gold-bg); }
+  .card.green { border-color: rgba(106,171,122,0.25); background: var(--green-bg); }
+  .card.red { border-color: rgba(186,106,106,0.2); background: var(--red-bg); }
+  .card.purple { border-color: rgba(154,122,186,0.25); background: var(--purple-bg); }
+  .card h3 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .card .card-price { font-size: 1.8rem; font-weight: 800; color: var(--gold); }
+  .card p { font-size: 0.82rem; color: var(--dim); margin-top: 0.25rem; }
+  .card .tag {
+    display: inline-block; margin-top: 0.5rem; padding: 0.2rem 0.6rem;
+    border-radius: 4px; font-size: 0.6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .tag-gold { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); }
+  .tag-green { background: var(--green-bg); color: var(--green); }
+  .tag-red { background: rgba(186,106,106,0.1); color: var(--red); border: 1px solid rgba(186,106,106,0.2); }
+  .tag-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(106,154,186,0.2); }
+
+  .info { font-size: 0.78rem; color: var(--dim); margin: 0.5rem 0; }
+  .info strong { color: var(--text); }
+
+  .quick {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin: 0.75rem 0;
+  }
+  .quick-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.75rem; text-align: center;
+  }
+  .quick-item .qi-label { font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+  .quick-item .qi-price { font-size: 1.3rem; font-weight: 800; color: var(--accent); margin: 0.15rem 0; }
+  .quick-item .qi-detail { font-size: 0.68rem; color: var(--dim); }
+
+  /* Partner cards */
+  .partner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.75rem 0; }
+  .partner-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.75rem;
+  }
+  .partner-card h4 { font-size: 0.82rem; margin-bottom: 0.25rem; }
+  .partner-card .partner-rate { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+  .partner-card p { font-size: 0.72rem; color: var(--dim); }
+
+  footer {
+    text-align: center; padding: 1.5rem; font-size: 0.65rem; color: var(--muted);
+    border-top: 1px solid var(--border); margin-top: 1rem;
+  }
+
+  @media (max-width: 400px) {
+    .quick { grid-template-columns: 1fr 1fr; }
+    .partner-grid { grid-template-columns: 1fr; }
+    table { font-size: 0.78rem; }
+    th, td { padding: 0.35rem 0.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>House Longevity + Sauna Bath House</h1>
+  <div class="updated">Staff Pricing Reference &middot; Updated 24 Mar 2026</div>
+  <div class="tabs">
+    <button class="tab active" onclick="show('sbh')">Sauna</button>
+    <button class="tab" onclick="show('promos')">Promotions</button>
+    <button class="tab" onclick="show('rlt')">RLT</button>
+    <button class="tab" onclick="show('hbot')">HBOT</button>
+    <button class="tab" onclick="show('partners')">Partners</button>
+    <button class="tab" onclick="show('cafe')">Cafe</button>
+  </div>
+</header>
+
+<!-- ═══ SBH ═══ -->
+<div class="section active" id="sbh">
+  <div class="stitle">Walk-in</div>
+  <div class="quick">
+    <div class="quick-item">
+      <div class="qi-label">Walk-in</div>
+      <div class="qi-price">$55</div>
+      <div class="qi-detail">2 hours</div>
+    </div>
+    <div class="quick-item">
+      <div class="qi-label">Day Pass</div>
+      <div class="qi-price">$68</div>
+      <div class="qi-detail">All day</div>
+    </div>
+    <div class="quick-item" style="border-color:var(--gold-border);background:var(--gold-bg)">
+      <div class="qi-label" style="color:var(--gold)">Trial</div>
+      <div class="qi-price">$99</div>
+      <div class="qi-detail">5 sessions + 1 RLT<br>4 weeks &middot; 1 per customer</div>
+    </div>
+  </div>
+
+  <div class="stitle">Session Packs</div>
+  <table>
+    <thead><tr><th>Pack</th><th>Price</th><th>Per Session</th><th>Expiry</th><th>Free RLT</th></tr></thead>
+    <tbody>
+      <tr><td>5-Pack</td><td class="price">$205</td><td>$41</td><td>3 mo</td><td>1</td></tr>
+      <tr><td>10-Pack</td><td class="price">$380</td><td>$38</td><td>3 mo</td><td>3</td></tr>
+      <tr class="hl"><td><strong>20-Pack</strong></td><td class="price"><strong>$580</strong></td><td>$29</td><td>6 mo</td><td>5</td></tr>
+      <tr><td>50-Pack</td><td class="price">$1,250</td><td>$25</td><td>12 mo</td><td>10</td></tr>
+    </tbody>
+  </table>
+
+  <div class="stitle">Corporate / Private</div>
+  <table>
+    <thead><tr><th>Option</th><th>Price</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td>100-Pack</td><td class="price">$2,000</td><td>$20/session &middot; 24-month expiry &middot; 15 free RLT</td></tr>
+      <tr><td>Private Sauna</td><td class="price">$300/hr</td><td>Up to 20 pax</td></tr>
+    </tbody>
+  </table>
+  <div class="info">Corporate bookings only. Contact management.</div>
+
+  <div class="info" style="margin-top:1rem">Includes: two saunas, cold plunge pool, hot pool, ice shower. Swimsuits and towels provided.</div>
+</div>
+
+<!-- ═══ PROMOTIONS ═══ -->
+<div class="section" id="promos">
+  <div class="stitle">Evergreen Packages</div>
+
+  <div class="card gold">
+    <h3>Try Everything</h3>
+    <div class="card-price">$158</div>
+    <p>1 HBOT + 1 RLT + 2hr SBH entry. Swimsuits and towels provided.</p>
+  </div>
+
+  <div class="card">
+    <h3>First Timer HBOT Trial</h3>
+    <div class="card-price" style="color:var(--accent)">$99</div>
+    <p>1 HBOT session. One purchase only per customer.</p>
+  </div>
+
+  <div class="card">
+    <h3>SBH Trial</h3>
+    <div class="card-price" style="color:var(--accent)">$99</div>
+    <p>5 SBH sessions + 1 free RLT. 4-week expiry. One per customer.</p>
+  </div>
+
+  <div class="card purple">
+    <h3>Recovery Starter</h3>
+    <div class="card-price" style="color:var(--purple)">$199</div>
+    <p>1 HBOT session + 1 week of RLT (daily sessions).</p>
+    <span class="tag" style="background:var(--purple-bg);color:var(--purple);border:1px solid rgba(154,122,186,0.3)">1-week expiry</span>
+  </div>
+
+  <!-- INTERNAL PROMOTION ONLY -->
+  <div style="margin:2rem 0 1rem;padding:1.25rem 1rem;border:2px solid var(--red);border-radius:12px;background:var(--red-bg);text-align:center">
+    <div style="font-size:1.1rem;font-weight:800;color:var(--red);letter-spacing:0.06em;text-transform:uppercase">For Internal Promotion Only</div>
+    <div style="font-size:0.78rem;color:var(--dim);margin-top:0.25rem">Existing clients who have used our services. Not advertised publicly.</div>
+  </div>
+
+  <div class="card red">
+    <h3>Experience Pack</h3>
+    <div class="card-price" style="color:var(--red)">$288</div>
+    <p>10 sauna sessions + 1 HBOT + 6 RLT. 3-month expiry.</p>
+    <span class="tag tag-red">In-store only &middot; Ends 8 April 2026</span>
+    <div class="info" style="margin-top:0.75rem"><strong>Hapana:</strong> "$288 Experience Pack" &mdash; 10 SBH + 1 HBOT + 6 RLT credits, 90-day expiry</div>
+  </div>
+
+  <div class="card green">
+    <h3>Ultimate Recovery</h3>
+    <div class="card-price" style="color:var(--green)">$700</div>
+    <p>10 HBOT + 10 RLT sessions. 12-month expiry.<br>Saves $350 vs buying packs separately.</p>
+    <span class="tag tag-green">Pack holders only</span>
+  </div>
+</div>
+
+<!-- ═══ RLT ═══ -->
+<div class="section" id="rlt">
+  <div class="stitle">Red Light Therapy</div>
+  <div class="info">Medical-grade panels. Clinically validated wavelengths. Full-body treatment. 15-min sessions.</div>
+
+  <table>
+    <thead><tr><th>Pack</th><th>Price</th><th>Per Session</th><th>Expiry</th></tr></thead>
+    <tbody>
+      <tr><td>Walk-in</td><td class="price">$88</td><td>$88</td><td>&mdash;</td></tr>
+      <tr><td>5-Pack</td><td class="price">$205</td><td>$41</td><td>3 months</td></tr>
+      <tr class="hl"><td><strong>10-Pack</strong></td><td class="price"><strong>$350</strong></td><td>$35</td><td>6 months</td></tr>
+    </tbody>
+  </table>
+
+  <div class="stitle">Unlimited Memberships</div>
+
+  <div class="card gold">
+    <h3>First Timer — 2-Week Unlimited RLT</h3>
+    <div class="card-price">$159</div>
+    <p>Unlimited RLT sessions for 2 weeks. One purchase only per customer.</p>
+    <span class="tag tag-gold">First timers only</span>
+  </div>
+
+  <div class="card">
+    <h3>2-Week Unlimited RLT</h3>
+    <div class="card-price" style="color:var(--accent)">$199</div>
+    <p>Unlimited RLT sessions for 2 weeks.</p>
+  </div>
+
+  <div class="info">Free RLT from SBH packs: book upstairs at House Longevity.</div>
+</div>
+
+<!-- ═══ HBOT ═══ -->
+<div class="section" id="hbot">
+  <div class="stitle">Hyperbaric Oxygen Therapy</div>
+  <div class="info">1.5 ATA with supplemental oxygen. Private chamber. 60-min sessions.</div>
+
+  <table>
+    <thead><tr><th>Pack</th><th>Price</th><th>Per Session</th><th>Expiry</th></tr></thead>
+    <tbody>
+      <tr><td>Walk-in</td><td class="price">$150</td><td>$150</td><td>&mdash;</td></tr>
+      <tr><td>5-Pack</td><td class="price">$388</td><td>$77.60</td><td>3 months</td></tr>
+      <tr class="hl"><td><strong>10-Pack</strong></td><td class="price"><strong>$700</strong></td><td>$70</td><td>6 months</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>First Timer HBOT Trial</h3>
+    <div class="card-price" style="color:var(--accent);font-size:1.4rem">$99</div>
+    <p>1 session. One purchase only. Save $51 vs walk-in.</p>
+  </div>
+
+  <div class="stitle">Assessments</div>
+  <div class="card" style="text-align:center">
+    <h3 style="color:var(--accent)">Launching Soon</h3>
+    <p>VO2 Max, Body Composition, Grip Strength testing.<br>Details coming shortly.</p>
+  </div>
+</div>
+
+<!-- ═══ PARTNERS ═══ -->
+<div class="section" id="partners">
+
+  <div class="stitle">Platinum Fitness + Revel</div>
+
+  <div class="card gold">
+    <h3>Walk-in</h3>
+    <div class="card-price">$20</div>
+    <p>SBH walk-in + 1 free Red Light Therapy session.</p>
+  </div>
+
+  <div class="card" style="border-color:var(--gold-border)">
+    <h3>2-Week Unlimited + 5 RLT</h3>
+    <div class="card-price" style="color:var(--accent)">$99</div>
+    <p>2 weeks unlimited SBH access + 5 RLT sessions.</p>
+  </div>
+
+  <div class="card red" style="margin-bottom:0.5rem">
+    <h3>25% Off Everything</h3>
+    <p style="font-size:0.9rem;color:var(--text)"><strong>25% off all services and drinks</strong> — including cafe.</p>
+    <span class="tag tag-red">Until 8 April 2026</span>
+  </div>
+
+  <div class="stitle">The Executive Centre (TEC)</div>
+
+  <div class="card">
+    <h3>30% Off All &Agrave; La Carte</h3>
+    <p>30% off all walk-in / single-session services.<br><strong>Excludes:</strong> packs, packages, and drinks.</p>
+  </div>
+
+  <div class="stitle">How It Works</div>
+  <div class="info">
+    <strong>Verification:</strong> Partner must show staff ID or membership card.<br>
+    <strong>No stacking:</strong> Partner rate cannot combine with any other offer or promo.
+  </div>
+</div>
+
+<!-- ═══ CAFE ═══ -->
+<div class="section" id="cafe">
+  <div class="stitle">Cafe</div>
+
+  <table>
+    <thead><tr><th>Item</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr><td>Daily Brew (cold brew coffee)</td><td class="price">$5</td></tr>
+      <tr><td>Premium Brew (cold brew coffee)</td><td class="price">$8</td></tr>
+      <tr><td>House Tea (hot or cold brew)</td><td class="price">$7</td></tr>
+      <tr><td>Signature Tea (hot or cold brew)</td><td class="price">$8</td></tr>
+      <tr><td>Signature Matcha</td><td class="price">$8</td></tr>
+      <tr><td>Purist Matcha</td><td class="price">$9</td></tr>
+    </tbody>
+  </table>
+  <div class="info">No discounts on cafe items.</div>
+</div>
+
+<footer>
+  House Longevity &middot; Sauna Bath House &middot; 50 Raffles Place, Singapore Land Tower<br>
+  HL: Mon-Fri 8am-8pm, Sat 10am-6pm &middot; SBH: Daily 7am-9pm<br>
+  WhatsApp: 8088 2253
+</footer>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`[onclick="show('${id}')"]`).classList.add('active');
+}
+</script>
+</body>
+</html>
