@@ -114,6 +114,35 @@
   .partner-card .partner-rate { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
   .partner-card p { font-size: 0.72rem; color: var(--dim); }
 
+  /* Issues tracker */
+  .issues-section { margin-top: 1.5rem; }
+  .issue-row {
+    display: flex; align-items: flex-start; gap: 0.5rem;
+    padding: 0.6rem 0.75rem; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; margin: 0.4rem 0; font-size: 0.8rem;
+  }
+  .issue-status {
+    flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; margin-top: 0.35rem;
+  }
+  .issue-status.open { background: var(--gold); }
+  .issue-status.resolved { background: var(--green); }
+  .issue-row.resolved { opacity: 0.5; }
+
+  /* Collapsible history */
+  .history-toggle {
+    display: flex; align-items: center; gap: 0.5rem; width: 100%;
+    background: none; border: none; color: var(--muted); font-size: 0.7rem;
+    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; padding: 0.75rem 0; font-family: inherit;
+  }
+  .history-toggle::after {
+    content: '▸'; transition: transform 0.2s;
+  }
+  .history-toggle.open::after { transform: rotate(90deg); }
+  .history-content { display: none; }
+  .history-content.open { display: block; }
+  .history-entry { opacity: 0.7; margin-bottom: 1.25rem; }
+
   footer {
     text-align: center; padding: 1.5rem; font-size: 0.65rem; color: var(--muted);
     border-top: 1px solid var(--border); margin-top: 1rem;
@@ -131,7 +160,7 @@
 
 <header>
   <h1>House Longevity + Sauna Bath House</h1>
-  <div class="updated">Staff Pricing Reference &middot; Updated 25 Mar 2026</div>
+  <div class="updated">Staff Pricing Reference &middot; Updated 26 Mar 2026</div>
   <div class="tabs">
     <button class="tab active" onclick="show('brief')">Daily Brief</button>
     <button class="tab" onclick="show('sbh')">Sauna</button>
@@ -145,27 +174,76 @@
 
 <!-- ═══ DAILY BRIEF ═══ -->
 <div class="section active" id="brief">
-  <div class="section-divider">What's New &mdash; 25 March 2026</div>
 
-  <div class="card green">
-    <h3>Revel &mdash; Birthday Extension</h3>
-    <p>Free first-time SBH drop-in extended for <strong>all Revel CBD members</strong>.</p>
-    <p style="margin-top:0.35rem">One visit only. No booking required &mdash; just show membership.</p>
-    <span class="tag tag-green">Free drop-in</span>
-    <span class="tag tag-red">Until 11 April 2026</span>
-  </div>
+  <!-- ── 26 MARCH 2026 ── -->
+  <div class="section-divider">What's New &mdash; 26 March 2026</div>
 
   <div class="card gold">
-    <h3>St. James &mdash; New Partner Deal</h3>
-    <p><strong>$20 walk-in</strong> for all St. James members at Sauna Bathhouse.</p>
-    <p style="margin-top:0.35rem">Show St. James membership card or staff ID at reception.</p>
-    <span class="tag tag-gold">$20 walk-in</span>
-    <span class="tag tag-red">Until 8 April 2026</span>
+    <h3>$99 First Timer &mdash; Use Membership Page</h3>
+    <p>When selling the <strong>$99 SBH First Timer</strong>, always select it from the <strong>Membership page</strong> in Hapana.</p>
+    <p style="margin-top:0.35rem"><strong>Payment label matters:</strong></p>
+    <p>&bull; If customer pays via <strong>KoomiPay</strong> &rarr; mark as <strong>"Koomi Pay"</strong> on Hapana</p>
+    <p>&bull; If customer pays via <strong>PayNow</strong> &rarr; mark as <strong>"PayNow"</strong> on Hapana</p>
+    <p style="margin-top:0.35rem;color:var(--dim)">Wrong payment labels cause reconciliation issues. Please double-check before confirming.</p>
+    <span class="tag tag-gold">Important &mdash; every transaction</span>
   </div>
 
-  <div class="info" style="margin-top:1.25rem;padding:0.75rem;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
-    <strong>Reminder:</strong> All other partner deals (Revel 25% off, TEC 30% off) remain unchanged. Check <strong>Partners</strong> tab for full details.
+  <div class="card green">
+    <h3>Chatbot Is Live</h3>
+    <p>Our WhatsApp chatbot is now <strong>live</strong> and handling enquiries. Should help with common questions (pricing, first-timer info, opening hours).</p>
+    <p style="margin-top:0.35rem;color:var(--dim)">Auto-follow-up frequency has been reduced &mdash; no more repeated messages to customers.</p>
+    <span class="tag tag-green">Live now</span>
   </div>
+
+  <div class="info" style="margin-top:1rem;padding:0.75rem;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+    <strong>Hapana help:</strong> If you run into any issues &mdash; wrong package assigned, accidental credit deduction, or anything else &mdash; flag it to management immediately. If anyone needs a refresher on how Hapana works, let us know and we'll arrange a run-through. 🙂
+  </div>
+
+  <!-- ── KNOWN ISSUES ── -->
+  <div class="issues-section">
+    <div class="section-divider" style="font-size:0.75rem;margin-top:1.5rem">Known Issues</div>
+    <div class="issue-row">
+      <div class="issue-status open"></div>
+      <div><strong>Payment label mismatches</strong> &mdash; some transactions not labelled correctly as KoomiPay or PayNow on Hapana. Double-check payment method before confirming. <span style="color:var(--muted);font-size:0.7rem">Raised 26 Mar</span></div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-status open"></div>
+      <div><strong>Accidental credit deductions</strong> &mdash; if a wrong package is assigned or credits deducted in error, report to management immediately so it can be reversed. <span style="color:var(--muted);font-size:0.7rem">Raised 26 Mar</span></div>
+    </div>
+    <div class="issue-row resolved">
+      <div class="issue-status resolved"></div>
+      <div><strong>Chatbot over-messaging</strong> &mdash; auto-follow-ups were too frequent. Frequency has been dialled back. <span style="color:var(--muted);font-size:0.7rem">Raised 26 Mar &middot; Resolved 26 Mar</span></div>
+    </div>
+  </div>
+
+  <!-- ── PREVIOUS BRIEFS ── -->
+  <button class="history-toggle" onclick="toggleHistory(this)">Previous Briefs</button>
+  <div class="history-content">
+    <div class="history-entry">
+      <div class="section-divider" style="font-size:0.75rem">25 March 2026</div>
+
+      <div class="card green">
+        <h3>Revel &mdash; Birthday Extension</h3>
+        <p>Free first-time SBH drop-in extended for <strong>all Revel CBD members</strong>.</p>
+        <p style="margin-top:0.35rem">One visit only. No booking required &mdash; just show membership.</p>
+        <span class="tag tag-green">Free drop-in</span>
+        <span class="tag tag-red">Until 11 April 2026</span>
+      </div>
+
+      <div class="card gold">
+        <h3>St. James &mdash; New Partner Deal</h3>
+        <p><strong>$20 walk-in</strong> for all St. James members at Sauna Bathhouse.</p>
+        <p style="margin-top:0.35rem">Show St. James membership card or staff ID at reception.</p>
+        <span class="tag tag-gold">$20 walk-in</span>
+        <span class="tag tag-red">Until 8 April 2026</span>
+      </div>
+
+      <div class="info" style="margin-top:1.25rem;padding:0.75rem;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+        <strong>Reminder:</strong> All other partner deals (Revel 25% off, TEC 30% off) remain unchanged. Check <strong>Partners</strong> tab for full details.
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ═══ SBH ═══ -->
@@ -424,6 +502,10 @@ function show(id) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelector(`[onclick="show('${id}')"]`).classList.add('active');
+}
+function toggleHistory(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
 }
 </script>
 </body>
