@@ -131,9 +131,10 @@
 
 <header>
   <h1>House Longevity + Sauna Bath House</h1>
-  <div class="updated">Staff Pricing Reference &middot; Updated 24 Mar 2026</div>
+  <div class="updated">Staff Pricing Reference &middot; Updated 25 Mar 2026</div>
   <div class="tabs">
-    <button class="tab active" onclick="show('sbh')">Sauna</button>
+    <button class="tab active" onclick="show('brief')">Daily Brief</button>
+    <button class="tab" onclick="show('sbh')">Sauna</button>
     <button class="tab" onclick="show('promos')">Promotions</button>
     <button class="tab" onclick="show('rlt')">RLT</button>
     <button class="tab" onclick="show('hbot')">HBOT</button>
@@ -142,8 +143,33 @@
   </div>
 </header>
 
+<!-- ═══ DAILY BRIEF ═══ -->
+<div class="section active" id="brief">
+  <div class="section-divider">What's New &mdash; 25 March 2026</div>
+
+  <div class="card green">
+    <h3>Revel &mdash; Birthday Extension</h3>
+    <p>Free first-time SBH drop-in extended for <strong>all Revel CBD members</strong>.</p>
+    <p style="margin-top:0.35rem">One visit only. No booking required &mdash; just show membership.</p>
+    <span class="tag tag-green">Free drop-in</span>
+    <span class="tag tag-red">Until 11 April 2026</span>
+  </div>
+
+  <div class="card gold">
+    <h3>St. James &mdash; New Partner Deal</h3>
+    <p><strong>$20 walk-in</strong> for all St. James members at Sauna Bathhouse.</p>
+    <p style="margin-top:0.35rem">Show St. James membership card or staff ID at reception.</p>
+    <span class="tag tag-gold">$20 walk-in</span>
+    <span class="tag tag-red">Until 8 April 2026</span>
+  </div>
+
+  <div class="info" style="margin-top:1.25rem;padding:0.75rem;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+    <strong>Reminder:</strong> All other partner deals (Revel 25% off, TEC 30% off) remain unchanged. Check <strong>Partners</strong> tab for full details.
+  </div>
+</div>
+
 <!-- ═══ SBH ═══ -->
-<div class="section active" id="sbh">
+<div class="section" id="sbh">
   <div class="stitle">Walk-in</div>
   <div class="quick">
     <div class="quick-item">
@@ -314,15 +340,17 @@
 <!-- ═══ PARTNERS ═══ -->
 <div class="section" id="partners">
 
-  <div class="stitle">Platinum Fitness + Revel</div>
+  <div class="stitle">Revel &mdash; Birthday Special</div>
 
   <div class="card green">
-    <h3>First Timer — Free SBH Entry</h3>
+    <h3>Free First-Time Drop-In</h3>
     <div class="card-price" style="color:var(--green)">FREE</div>
-    <p>First-time Revel / PF members get a free SBH entry. One visit only.</p>
-    <span class="tag tag-green">First visit only</span>
-    <span class="tag tag-red">Ends 29 March 2026</span>
+    <p>All <strong>Revel CBD members</strong> get a free SBH entry (first visit only).</p>
+    <span class="tag tag-green">Revel only &middot; One visit</span>
+    <span class="tag tag-red">Until 11 April 2026</span>
   </div>
+
+  <div class="stitle">Revel + Platinum Fitness</div>
 
   <div class="card gold">
     <h3>Walk-in</h3>
@@ -338,7 +366,16 @@
 
   <div class="card red" style="margin-bottom:0.5rem">
     <h3>25% Off Everything</h3>
-    <p style="font-size:0.9rem;color:var(--text)"><strong>25% off all services and drinks</strong> — including cafe.</p>
+    <p style="font-size:0.9rem;color:var(--text)"><strong>25% off all services and drinks</strong> &mdash; including cafe.</p>
+    <span class="tag tag-red">Until 8 April 2026</span>
+  </div>
+
+  <div class="stitle">St. James</div>
+
+  <div class="card gold">
+    <h3>Walk-in</h3>
+    <div class="card-price">$20</div>
+    <p>SBH walk-in for all St. James members. Show membership card or staff ID.</p>
     <span class="tag tag-red">Until 8 April 2026</span>
   </div>
 
