@@ -3,510 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HL + SBH — Staff Pricing</title>
+<title>Staff Pricing — House Longevity + Sauna Bath House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --bg: #0f1117; --surface: #1a1d25; --surface2: #22252e;
-    --border: #2e3240; --text: #e8e4df; --dim: #9a9590;
-    --muted: #6b6560; --accent: #c4a882; --gold: #d4a74f;
-    --gold-bg: rgba(212,167,79,0.08); --gold-border: rgba(212,167,79,0.25);
-    --green: #6aab7a; --green-bg: rgba(106,171,122,0.08);
-    --blue: #6a9aba; --blue-bg: rgba(106,154,186,0.08);
-    --red: #ba6a6a; --red-bg: rgba(186,106,106,0.06);
-    --purple: #9a7aba; --purple-bg: rgba(154,122,186,0.08);
+  :root{
+    --bg:#f6f1ea; --card:#fffdf9; --ink:#2a2018; --muted:#8a7c6c; --line:#e4d9c8;
+    --accent:#8b5a3c; --accent-soft:#f0e4d8; --green:#5d7a4f; --green-bg:#e6eddf;
+    --amber:#b07d2a; --amber-bg:#f6e8cc; --radius:15px; --serif:'Newsreader',Iowan,Charter,Georgia,serif;
   }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg); color: var(--text); line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  header {
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 1rem 1rem 0.75rem; text-align: center; position: sticky; top: 0; z-index: 100;
-  }
-  header h1 { font-size: 1.1rem; font-weight: 700; }
-  header .updated { font-size: 0.65rem; color: var(--muted); margin-top: 0.15rem; }
-
-  .tabs {
-    display: flex; overflow-x: auto; gap: 0; padding: 0.5rem 0 0;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab {
-    flex-shrink: 0; padding: 0.5rem 0.75rem; border: none; background: none;
-    color: var(--muted); font-size: 0.68rem; font-weight: 600; cursor: pointer;
-    letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;
-    border-bottom: 2px solid transparent; transition: all 0.15s; font-family: inherit;
-  }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-  .section { display: none; padding: 1rem; max-width: 600px; margin: 0 auto; }
-  .section.active { display: block; }
-
-  .stitle {
-    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--muted); font-weight: 700; margin: 1.25rem 0 0.5rem;
-  }
-  .stitle:first-child { margin-top: 0; }
-
-  .section-divider {
-    font-size: 0.85rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--text); padding: 0.6rem 0; margin: 1.5rem 0 0.75rem;
-    border-bottom: 2px solid var(--border);
-  }
-  .section-divider:first-child { margin-top: 0; }
-
-  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  th {
-    text-align: left; padding: 0.4rem 0.5rem; font-size: 0.58rem;
-    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
-    font-weight: 700; border-bottom: 1px solid var(--border);
-  }
-  td { padding: 0.45rem 0.5rem; border-bottom: 1px solid rgba(46,50,64,0.5); }
-  tr.hl td { background: var(--gold-bg); }
-  tr.gl td { background: var(--green-bg); }
-  .price { font-weight: 700; color: var(--accent); }
-
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1rem; margin: 0.75rem 0;
-  }
-  .card.gold { border-color: var(--gold-border); background: var(--gold-bg); }
-  .card.green { border-color: rgba(106,171,122,0.25); background: var(--green-bg); }
-  .card.red { border-color: rgba(186,106,106,0.2); background: var(--red-bg); }
-  .card.purple { border-color: rgba(154,122,186,0.25); background: var(--purple-bg); }
-  .card h3 { font-size: 0.95rem; margin-bottom: 0.3rem; }
-  .card .card-price { font-size: 1.8rem; font-weight: 800; color: var(--gold); }
-  .card p { font-size: 0.82rem; color: var(--dim); margin-top: 0.25rem; }
-  .card .tag {
-    display: inline-block; margin-top: 0.5rem; padding: 0.2rem 0.6rem;
-    border-radius: 4px; font-size: 0.6rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .tag-gold { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); }
-  .tag-green { background: var(--green-bg); color: var(--green); }
-  .tag-red { background: rgba(186,106,106,0.1); color: var(--red); border: 1px solid rgba(186,106,106,0.2); }
-  .tag-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(106,154,186,0.2); }
-
-  .info { font-size: 0.78rem; color: var(--dim); margin: 0.5rem 0; }
-  .info strong { color: var(--text); }
-
-  .quick {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin: 0.75rem 0;
-  }
-  .quick-item {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 0.75rem; text-align: center;
-  }
-  .quick-item .qi-label { font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
-  .quick-item .qi-price { font-size: 1.3rem; font-weight: 800; color: var(--accent); margin: 0.15rem 0; }
-  .quick-item .qi-detail { font-size: 0.68rem; color: var(--dim); }
-
-  /* Partner cards */
-  .partner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.75rem 0; }
-  .partner-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 0.75rem;
-  }
-  .partner-card h4 { font-size: 0.82rem; margin-bottom: 0.25rem; }
-  .partner-card .partner-rate { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
-  .partner-card p { font-size: 0.72rem; color: var(--dim); }
-
-  /* Issues tracker */
-  .issues-section { margin-top: 1.5rem; }
-  .issue-row {
-    display: flex; align-items: flex-start; gap: 0.5rem;
-    padding: 0.6rem 0.75rem; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; margin: 0.4rem 0; font-size: 0.8rem;
-  }
-  .issue-status {
-    flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; margin-top: 0.35rem;
-  }
-  .issue-status.open { background: var(--gold); }
-  .issue-status.resolved { background: var(--green); }
-  .issue-row.resolved { opacity: 0.5; }
-
-  /* Collapsible history */
-  .history-toggle {
-    display: flex; align-items: center; gap: 0.5rem; width: 100%;
-    background: none; border: none; color: var(--muted); font-size: 0.7rem;
-    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    cursor: pointer; padding: 0.75rem 0; font-family: inherit;
-  }
-  .history-toggle::after {
-    content: '▸'; transition: transform 0.2s;
-  }
-  .history-toggle.open::after { transform: rotate(90deg); }
-  .history-content { display: none; }
-  .history-content.open { display: block; }
-  .history-entry { opacity: 0.7; margin-bottom: 1.25rem; }
-
-  footer {
-    text-align: center; padding: 1.5rem; font-size: 0.65rem; color: var(--muted);
-    border-top: 1px solid var(--border); margin-top: 1rem;
-  }
-
-  @media (max-width: 400px) {
-    .quick { grid-template-columns: 1fr 1fr; }
-    .partner-grid { grid-template-columns: 1fr; }
-    table { font-size: 0.78rem; }
-    th, td { padding: 0.35rem 0.4rem; }
-  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:30px 22px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:8px}
+  h1{font-size:28px;font-weight:600;margin:0 0 4px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:14px}
+  .src{color:var(--muted);font-size:12.5px;margin-top:6px;font-style:italic}
+  h2{font-size:20px;font-weight:600;margin:34px 0 4px;letter-spacing:-.01em}
+  h3{font-size:15px;font-weight:600;margin:18px 0 6px;color:var(--accent)}
+  .note{font-size:13.5px;color:var(--muted);margin:4px 0 10px}
+  table{width:100%;border-collapse:collapse;margin:8px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  th,td{text-align:left;padding:9px 13px;font-size:14.5px;border-bottom:1px solid var(--line)}
+  th{background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:13px;letter-spacing:.02em}
+  tr:last-child td{border-bottom:none}
+  td.price{font-weight:600;white-space:nowrap}
+  td.mem{color:var(--green);white-space:nowrap}
+  .tier{display:inline-block;font-size:12px;padding:2px 10px;border-radius:20px;background:var(--accent-soft);color:var(--accent);margin-left:8px;vertical-align:middle;font-weight:500}
+  .pill{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:20px;background:var(--amber-bg);color:var(--amber);font-weight:600}
+  .callout{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 15px;margin:10px 0;font-size:14px}
+  .callout strong{color:var(--accent)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:620px){.grid2{grid-template-columns:1fr}}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  footer b{color:var(--ink);font-weight:600}
 </style>
 </head>
 <body>
-
+<div class="wrap">
 <header>
-  <h1>House Longevity + Sauna Bath House</h1>
-  <div class="updated">Staff Pricing Reference &middot; Updated 26 Mar 2026</div>
-  <div class="tabs">
-    <button class="tab active" onclick="show('brief')">Daily Brief</button>
-    <button class="tab" onclick="show('sbh')">Sauna</button>
-    <button class="tab" onclick="show('promos')">Promotions</button>
-    <button class="tab" onclick="show('rlt')">RLT</button>
-    <button class="tab" onclick="show('hbot')">HBOT</button>
-    <button class="tab" onclick="show('partners')">Partners</button>
-    <button class="tab" onclick="show('cafe')">Cafe</button>
-  </div>
+  <h1>Staff Pricing</h1>
+  <div class="sub">House Longevity + Sauna Bath House — internal quick reference</div>
+  <div class="src">Generated from bedrock-pricing.md (single source of truth). Last updated 2026‑05‑26. If a price looks wrong, check bedrock — don't edit this page directly.</div>
 </header>
 
-<!-- ═══ DAILY BRIEF ═══ -->
-<div class="section active" id="brief">
-
-  <!-- ── 26 MARCH 2026 ── -->
-  <div class="section-divider">What's New &mdash; 26 March 2026</div>
-
-  <div class="card gold">
-    <h3>$99 First Timer &mdash; Use Membership Page</h3>
-    <p>When selling the <strong>$99 SBH First Timer</strong>, always select it from the <strong>Membership page</strong> in Hapana.</p>
-    <p style="margin-top:0.35rem"><strong>Payment label matters:</strong></p>
-    <p>&bull; If customer pays via <strong>KoomiPay</strong> &rarr; mark as <strong>"Koomi Pay"</strong> on Hapana</p>
-    <p>&bull; If customer pays via <strong>PayNow</strong> &rarr; mark as <strong>"PayNow"</strong> on Hapana</p>
-    <p style="margin-top:0.35rem;color:var(--dim)">Wrong payment labels cause reconciliation issues. Please double-check before confirming.</p>
-    <span class="tag tag-gold">Important &mdash; every transaction</span>
-  </div>
-
-  <div class="card green">
-    <h3>Chatbot Is Live</h3>
-    <p>Our WhatsApp chatbot is now <strong>live</strong> and handling enquiries. Should help with common questions (pricing, first-timer info, opening hours).</p>
-    <p style="margin-top:0.35rem;color:var(--dim)">Auto-follow-up frequency has been reduced &mdash; no more repeated messages to customers.</p>
-    <span class="tag tag-green">Live now</span>
-  </div>
-
-  <div class="info" style="margin-top:1rem;padding:0.75rem;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
-    <strong>Hapana help:</strong> If you run into any issues &mdash; wrong package assigned, accidental credit deduction, or anything else &mdash; flag it to management immediately. If anyone needs a refresher on how Hapana works, let us know and we'll arrange a run-through. 🙂
-  </div>
-
-  <!-- ── KNOWN ISSUES ── -->
-  <div class="issues-section">
-    <div class="section-divider" style="font-size:0.75rem;margin-top:1.5rem">Known Issues</div>
-    <div class="issue-row">
-      <div class="issue-status open"></div>
-      <div><strong>Payment label mismatches</strong> &mdash; some transactions not labelled correctly as KoomiPay or PayNow on Hapana. Double-check payment method before confirming. <span style="color:var(--muted);font-size:0.7rem">Raised 26 Mar</span></div>
-    </div>
-    <div class="issue-row">
-      <div class="issue-status open"></div>
-      <div><strong>Accidental credit deductions</strong> &mdash; if a wrong package is assigned or credits deducted in error, report to management immediately so it can be reversed. <span style="color:var(--muted);font-size:0.7rem">Raised 26 Mar</span></div>
-    </div>
-    <div class="issue-row resolved">
-      <div class="issue-status resolved"></div>
-      <div><strong>Chatbot over-messaging</strong> &mdash; auto-follow-ups were too frequent. Frequency has been dialled back. <span style="color:var(--muted);font-size:0.7rem">Raised 26 Mar &middot; Resolved 26 Mar</span></div>
-    </div>
-  </div>
-
-  <!-- ── PREVIOUS BRIEFS ── -->
-  <button class="history-toggle" onclick="toggleHistory(this)">Previous Briefs</button>
-  <div class="history-content">
-    <div class="history-entry">
-      <div class="section-divider" style="font-size:0.75rem">25 March 2026</div>
-
-      <div class="card green">
-        <h3>Revel &mdash; Birthday Extension</h3>
-        <p>Free first-time SBH drop-in extended for <strong>all Revel CBD members</strong>.</p>
-        <p style="margin-top:0.35rem">One visit only. No booking required &mdash; just show membership.</p>
-        <span class="tag tag-green">Free drop-in</span>
-        <span class="tag tag-red">Until 11 April 2026</span>
-      </div>
-
-      <div class="card gold">
-        <h3>St. James &mdash; New Partner Deal</h3>
-        <p><strong>$20 walk-in</strong> for all St. James members at Sauna Bathhouse.</p>
-        <p style="margin-top:0.35rem">Show St. James membership card or staff ID at reception.</p>
-        <span class="tag tag-gold">$20 walk-in</span>
-        <span class="tag tag-red">Until 8 April 2026</span>
-      </div>
-
-      <div class="info" style="margin-top:1.25rem;padding:0.75rem;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
-        <strong>Reminder:</strong> All other partner deals (Revel 25% off, TEC 30% off) remain unchanged. Check <strong>Partners</strong> tab for full details.
-      </div>
-    </div>
-  </div>
-
+<div class="callout">
+  <strong>Member discounts</strong> — three tiers: <strong>À la carte</strong> 30% off · <strong>Packages</strong> (packs + memberships) 20% off · <strong>Promotions</strong> no discount.
+  A customer is a <strong>Member</strong> automatically if they have any active First Timer trial, any pack with sessions left, or an Off-Peak/Full membership. No card — the active pack is the membership.
 </div>
 
-<!-- ═══ SBH ═══ -->
-<div class="section" id="sbh">
-  <div class="stitle">Walk-in</div>
-  <div class="quick">
-    <div class="quick-item">
-      <div class="qi-label">Walk-in</div>
-      <div class="qi-price">$55</div>
-      <div class="qi-detail">2 hours</div>
-    </div>
-    <div class="quick-item">
-      <div class="qi-label">Day Pass</div>
-      <div class="qi-price">$68</div>
-      <div class="qi-detail">All day</div>
-    </div>
-    <div class="quick-item" style="border-color:var(--gold-border);background:var(--gold-bg)">
-      <div class="qi-label" style="color:var(--gold)">Trial</div>
-      <div class="qi-price">$99</div>
-      <div class="qi-detail">5 sessions + 1 RLT<br>4 weeks &middot; 1 per customer</div>
-    </div>
-  </div>
+<h2>À la Carte <span class="tier">30% member off</span></h2>
+<table>
+  <thead><tr><th>Service</th><th>Standard</th><th>Member</th><th>Details</th></tr></thead>
+  <tbody>
+    <tr><td>SBH Walk-in</td><td class="price">$55</td><td class="mem">$38.50</td><td>2-hour entry</td></tr>
+    <tr><td>SBH Day Pass</td><td class="price">$68</td><td class="mem">$47.60</td><td>All-day access</td></tr>
+    <tr><td>Red Light Therapy</td><td class="price">$55</td><td class="mem">$38.50</td><td>15-min full-body session</td></tr>
+    <tr><td>Hyperbaric Oxygen</td><td class="price">$150</td><td class="mem">$105</td><td>60-min, 1.5 ATA + supplemental O₂</td></tr>
+    <tr><td>Private Sauna</td><td class="price">$300/hr</td><td class="mem">—</td><td>Up to 20 pax, corporate bookings only</td></tr>
+  </tbody>
+</table>
+<div class="note">SBH includes: two Finnish saunas (dry heat, 80–100°C), cold plunge, hot pool, ice shower. Swimsuits + towels provided.</div>
 
-  <div class="stitle">Session Packs</div>
+<h2>Packages <span class="tier">20% member off</span></h2>
+
+<h3>SBH Session Packs</h3>
+<table>
+  <thead><tr><th>Pack</th><th>Standard</th><th>Per session</th><th>Member</th><th>Expiry</th></tr></thead>
+  <tbody>
+    <tr><td>5-Pack</td><td class="price">$205</td><td>$41</td><td class="mem">$164</td><td>3 months</td></tr>
+    <tr><td>10-Pack</td><td class="price">$380</td><td>$38</td><td class="mem">$304</td><td>3 months</td></tr>
+    <tr><td>20-Pack</td><td class="price">$580</td><td>$29</td><td class="mem">$464</td><td>6 months</td></tr>
+    <tr><td>50-Pack</td><td class="price">$1,250</td><td>$25</td><td class="mem">$1,000</td><td>12 months</td></tr>
+  </tbody>
+</table>
+
+<h3>RLT Packs</h3>
+<table>
+  <thead><tr><th>Pack</th><th>Standard</th><th>Per session</th><th>Member</th><th>Expiry</th></tr></thead>
+  <tbody>
+    <tr><td>10-Pack</td><td class="price">$199</td><td>$19.90</td><td class="mem">$159</td><td>6 months</td></tr>
+    <tr><td>20-Pack</td><td class="price">$349</td><td>$17.45</td><td class="mem">$279</td><td>12 months</td></tr>
+    <tr><td>50-Pack</td><td class="price">$749</td><td>$14.98</td><td class="mem">$599</td><td>12 months</td></tr>
+    <tr><td>2-Week Unlimited</td><td class="price">$199</td><td>—</td><td class="mem">$159</td><td>2 weeks</td></tr>
+  </tbody>
+</table>
+
+<h3>HBOT Packs</h3>
+<table>
+  <thead><tr><th>Pack</th><th>Standard</th><th>Per session</th><th>Member</th><th>Expiry</th></tr></thead>
+  <tbody>
+    <tr><td>5-Pack</td><td class="price">$388</td><td>$77.60</td><td class="mem">$310</td><td>3 months</td></tr>
+    <tr><td>10-Pack</td><td class="price">$700</td><td>$70</td><td class="mem">$560</td><td>6 months</td></tr>
+  </tbody>
+</table>
+<div class="note">Pack rules: no freezing, no pausing, non-transferable.</div>
+
+<h2>Memberships <span class="tier">flat monthly rate</span></h2>
+<table>
+  <thead><tr><th>Membership</th><th>Price</th><th>Access</th><th>Commitment</th></tr></thead>
+  <tbody>
+    <tr><td>SBH Full Unlimited</td><td class="price">$375/mo</td><td>Unlimited SBH, all hours, all days</td><td>Month-to-month, no lock-in</td></tr>
+    <tr><td>SBH Off-Peak Unlimited</td><td class="price">$200/mo</td><td>Unlimited SBH, Mon–Fri before 5pm (exit by 5pm); closed on public holidays</td><td>Month-to-month, no lock-in</td></tr>
+  </tbody>
+</table>
+<div class="note">Signup gifts are ad-hoc, decided per customer at point of sale — never pre-announced or advertised.</div>
+
+<h2>Promotions <span class="tier">no member discount</span></h2>
+
+<h3>Trials &amp; Bundles</h3>
+<table>
+  <thead><tr><th>Offer</th><th>Price</th><th>Includes</th><th>Restriction</th></tr></thead>
+  <tbody>
+    <tr><td>Try Everything</td><td class="price">$158</td><td>1 HBOT + 1 RLT + 1 SBH entry</td><td>None</td></tr>
+    <tr><td>RLT First Timer</td><td class="price">$159</td><td>2 weeks unlimited RLT</td><td>First timers, one per customer</td></tr>
+    <tr><td>HBOT First Timer</td><td class="price">$99</td><td>1 HBOT session</td><td>First timers, one per customer</td></tr>
+    <tr><td>SBH First Timer</td><td class="price">$99</td><td>5 SBH sessions + 1 free RLT, 4-week expiry</td><td>One per customer</td></tr>
+    <tr><td>SBH Off-Peak Trial</td><td class="price">$125</td><td>14 days unlimited off-peak (Mon–Fri before 5pm)</td><td>One per customer; non-transferable; Meta ad offer. No bundled inclusions.</td></tr>
+  </tbody>
+</table>
+<div class="note"><strong>Sell the $99 SBH First Timer from the Membership page in Hapana</strong> (it's filed under Membership, not à la carte).</div>
+
+<h3>Trial Conversion <span class="pill">active $99 SBH trial holders only</span></h3>
+<div class="note">Available only while the $99 SBH Trial is active. Once it expires, standard pricing applies (20-Pack reverts to $580).</div>
+<table>
+  <thead><tr><th>Offer</th><th>Price</th><th>Details</th><th>Expiry</th></tr></thead>
+  <tbody>
+    <tr><td>20-Pack (Trial Rate)</td><td class="price">$388</td><td>20 SBH sessions, anytime. $19.40/session.</td><td>6 months</td></tr>
+  </tbody>
+</table>
+
+<h3>Internal <span class="pill">in-store only — not advertised</span></h3>
+<table>
+  <thead><tr><th>Offer</th><th>Price</th><th>Details</th><th>Expiry</th></tr></thead>
+  <tbody>
+    <tr><td>SBH 10-Pack (Internal)</td><td class="price">$250</td><td>10 SBH sessions, anytime. $25/session.</td><td>6 months</td></tr>
+  </tbody>
+</table>
+<div class="note">In-store only. One per customer. Promotions do not stack with member discounts, partner rates, or other promotions.</div>
+
+<h2>Partners</h2>
+<div class="callout">
+  <strong>One unified rule for every partner</strong> (no tiers, no per-partner deals): <strong>30% off à la carte</strong> (walk-ins/single sessions; excludes Private Sauna) · <strong>20% off packages</strong> (matches public member rate) · <strong>no discount on promotions</strong>.
+</div>
+<div class="note">
+  <b>No partners active</b> under the unified terms right now — generic terms ready for the next one. Past arrangements (TEC, Platinum Fitness, Revel) are <b>closed</b>.<br>
+  Rules: verify by staff ID / partner card / allowlist · no stacking with any other offer · in-store only (not website checkout) · cafe excluded.
+</div>
+
+<h2>Cafe <span class="tier">no discounts</span></h2>
+<div class="grid2">
   <table>
-    <thead><tr><th>Pack</th><th>Price</th><th>Per Session</th><th>Expiry</th><th>Free RLT</th></tr></thead>
     <tbody>
-      <tr><td>5-Pack</td><td class="price">$205</td><td>$41</td><td>3 mo</td><td>1</td></tr>
-      <tr><td>10-Pack</td><td class="price">$380</td><td>$38</td><td>3 mo</td><td>3</td></tr>
-      <tr class="hl"><td><strong>20-Pack</strong></td><td class="price"><strong>$580</strong></td><td>$29</td><td>6 mo</td><td>5</td></tr>
-      <tr><td>50-Pack</td><td class="price">$1,250</td><td>$25</td><td>12 mo</td><td>10</td></tr>
+      <tr><td>Daily Brew (cold brew)</td><td class="price">$5</td></tr>
+      <tr><td>Premium Brew (cold brew)</td><td class="price">$8</td></tr>
+      <tr><td>House Tea (hot / cold)</td><td class="price">$7</td></tr>
     </tbody>
   </table>
-
-  <div class="stitle">Corporate / Private</div>
   <table>
-    <thead><tr><th>Option</th><th>Price</th><th>Details</th></tr></thead>
     <tbody>
-      <tr><td>100-Pack</td><td class="price">$2,000</td><td>$20/session &middot; 24-month expiry &middot; 15 free RLT</td></tr>
-      <tr><td>Private Sauna</td><td class="price">$300/hr</td><td>Up to 20 pax</td></tr>
-    </tbody>
-  </table>
-  <div class="info">Corporate bookings only. Contact management.</div>
-
-  <div class="info" style="margin-top:1rem">Includes: two saunas, cold plunge pool, hot pool, ice shower. Swimsuits and towels provided.</div>
-</div>
-
-<!-- ═══ PROMOTIONS ═══ -->
-<div class="section" id="promos">
-  <div class="section-divider">Evergreen Pricing <span style="font-size:0.55rem;font-weight:600;color:var(--dim);letter-spacing:0.08em;vertical-align:middle;margin-left:0.5rem">NOT LIMITED TIME &mdash; FIRST TIMERS ONLY</span></div>
-
-  <div class="card gold">
-    <h3>First Timer RLT Trial</h3>
-    <div class="card-price">$159</div>
-    <p>2 weeks unlimited Red Light Therapy. One purchase only per customer.</p>
-    <span class="tag tag-gold">First timers only</span>
-    <span class="tag tag-blue">2-week expiry</span>
-  </div>
-
-  <div class="card">
-    <h3>First Timer HBOT Trial</h3>
-    <div class="card-price" style="color:var(--accent)">$99</div>
-    <p>1 HBOT session. One purchase only per customer.</p>
-    <span class="tag tag-gold">First timers only</span>
-    <span class="tag tag-blue">No expiry</span>
-  </div>
-
-  <div class="card purple">
-    <h3>Recovery Starter</h3>
-    <div class="card-price" style="color:var(--purple)">$199</div>
-    <p>1 HBOT session + 1 week of RLT (daily sessions).</p>
-    <span class="tag" style="background:var(--purple-bg);color:var(--purple);border:1px solid rgba(154,122,186,0.3)">1-week expiry</span>
-  </div>
-
-  <div class="section-divider">Limited Time Offers</div>
-
-  <div class="card" style="border-color:var(--gold-border);background:var(--gold-bg)">
-    <h3>Try Everything</h3>
-    <div class="card-price" style="color:var(--gold)">$158</div>
-    <p>1 HBOT + 1 RLT + 2hr SBH entry. Swimsuits and towels provided.</p>
-    <span class="tag tag-blue">1-month expiry</span>
-  </div>
-
-  <div class="card">
-    <h3>SBH Trial</h3>
-    <div class="card-price" style="color:var(--accent)">$99</div>
-    <p>5 SBH sessions + 1 free RLT. One per customer.</p>
-    <span class="tag tag-blue">4-week expiry</span>
-  </div>
-
-  <!-- INTERNAL PROMOTION ONLY -->
-  <div style="margin:2rem 0 1rem;padding:1.25rem 1rem;border:2px solid var(--red);border-radius:12px;background:var(--red-bg);text-align:center">
-    <div style="font-size:1.1rem;font-weight:800;color:var(--red);letter-spacing:0.06em;text-transform:uppercase">For Internal Promotion Only</div>
-    <div style="font-size:0.78rem;color:var(--dim);margin-top:0.25rem">Existing clients who have used our services. Not advertised publicly.</div>
-  </div>
-
-  <div class="card red">
-    <h3>Experience Pack</h3>
-    <div class="card-price" style="color:var(--red)">$288</div>
-    <p>10 sauna sessions + 1 HBOT + 6 RLT. 3-month expiry.</p>
-    <span class="tag tag-red">In-store only &middot; Ends 8 April 2026</span>
-    <div class="info" style="margin-top:0.75rem"><strong>Hapana:</strong> "$288 Experience Pack" &mdash; 10 SBH + 1 HBOT + 6 RLT credits, 90-day expiry</div>
-  </div>
-
-  <div class="card green">
-    <h3>Ultimate Recovery</h3>
-    <div class="card-price" style="color:var(--green)">$700</div>
-    <p>10 HBOT + 10 RLT sessions. 12-month expiry.<br>Saves $350 vs buying packs separately.</p>
-    <span class="tag tag-green">Pack holders only</span>
-  </div>
-</div>
-
-<!-- ═══ RLT ═══ -->
-<div class="section" id="rlt">
-  <div class="stitle">Red Light Therapy</div>
-  <div class="info">Medical-grade panels. Clinically validated wavelengths. Full-body treatment. 15-min sessions.</div>
-
-  <table>
-    <thead><tr><th>Pack</th><th>Price</th><th>Per Session</th><th>Expiry</th></tr></thead>
-    <tbody>
-      <tr><td>Walk-in</td><td class="price">$88</td><td>$88</td><td>&mdash;</td></tr>
-      <tr><td>5-Pack</td><td class="price">$205</td><td>$41</td><td>3 months</td></tr>
-      <tr class="hl"><td><strong>10-Pack</strong></td><td class="price"><strong>$350</strong></td><td>$35</td><td>6 months</td></tr>
-    </tbody>
-  </table>
-
-  <div class="stitle">Unlimited Memberships</div>
-
-  <div class="card gold">
-    <h3>First Timer — 2-Week Unlimited RLT</h3>
-    <div class="card-price">$159</div>
-    <p>Unlimited RLT sessions for 2 weeks. One purchase only per customer.</p>
-    <span class="tag tag-gold">First timers only</span>
-  </div>
-
-  <div class="card">
-    <h3>2-Week Unlimited RLT</h3>
-    <div class="card-price" style="color:var(--accent)">$199</div>
-    <p>Unlimited RLT sessions for 2 weeks.</p>
-  </div>
-
-  <div class="info">Free RLT from SBH packs: book upstairs at House Longevity.</div>
-</div>
-
-<!-- ═══ HBOT ═══ -->
-<div class="section" id="hbot">
-  <div class="stitle">Hyperbaric Oxygen Therapy</div>
-  <div class="info">1.5 ATA with supplemental oxygen. Private chamber. 60-min sessions.</div>
-
-  <table>
-    <thead><tr><th>Pack</th><th>Price</th><th>Per Session</th><th>Expiry</th></tr></thead>
-    <tbody>
-      <tr><td>Walk-in</td><td class="price">$150</td><td>$150</td><td>&mdash;</td></tr>
-      <tr><td>5-Pack</td><td class="price">$388</td><td>$77.60</td><td>3 months</td></tr>
-      <tr class="hl"><td><strong>10-Pack</strong></td><td class="price"><strong>$700</strong></td><td>$70</td><td>6 months</td></tr>
-    </tbody>
-  </table>
-
-  <div class="card" style="margin-top:1rem">
-    <h3>First Timer HBOT Trial</h3>
-    <div class="card-price" style="color:var(--accent);font-size:1.4rem">$99</div>
-    <p>1 session. One purchase only. Save $51 vs walk-in.</p>
-  </div>
-
-  <div class="stitle">Assessments</div>
-  <div class="card" style="text-align:center">
-    <h3 style="color:var(--accent)">Launching Soon</h3>
-    <p>VO2 Max, Body Composition, Grip Strength testing.<br>Details coming shortly.</p>
-  </div>
-</div>
-
-<!-- ═══ PARTNERS ═══ -->
-<div class="section" id="partners">
-
-  <div class="stitle">Revel &mdash; Birthday Special</div>
-
-  <div class="card green">
-    <h3>Free First-Time Drop-In</h3>
-    <div class="card-price" style="color:var(--green)">FREE</div>
-    <p>All <strong>Revel CBD members</strong> get a free SBH entry (first visit only).</p>
-    <span class="tag tag-green">Revel only &middot; One visit</span>
-    <span class="tag tag-red">Until 11 April 2026</span>
-  </div>
-
-  <div class="stitle">Revel + Platinum Fitness</div>
-
-  <div class="card gold">
-    <h3>Walk-in</h3>
-    <div class="card-price">$20</div>
-    <p>SBH walk-in + 1 free Red Light Therapy session.</p>
-  </div>
-
-  <div class="card" style="border-color:var(--gold-border)">
-    <h3>2-Week Unlimited + 5 RLT</h3>
-    <div class="card-price" style="color:var(--accent)">$99</div>
-    <p>2 weeks unlimited SBH access + 5 RLT sessions.</p>
-  </div>
-
-  <div class="card red" style="margin-bottom:0.5rem">
-    <h3>25% Off Everything</h3>
-    <p style="font-size:0.9rem;color:var(--text)"><strong>25% off all services and drinks</strong> &mdash; including cafe.</p>
-    <span class="tag tag-red">Until 8 April 2026</span>
-  </div>
-
-  <div class="stitle">St. James</div>
-
-  <div class="card gold">
-    <h3>Walk-in</h3>
-    <div class="card-price">$20</div>
-    <p>SBH walk-in for all St. James members. Show membership card or staff ID.</p>
-    <span class="tag tag-red">Until 8 April 2026</span>
-  </div>
-
-  <div class="stitle">The Executive Centre (TEC)</div>
-
-  <div class="card">
-    <h3>30% Off All &Agrave; La Carte</h3>
-    <p>30% off all walk-in / single-session services.<br><strong>Excludes:</strong> packs, packages, and drinks.</p>
-    <span class="tag tag-red">Expires 30 June 2026</span>
-  </div>
-
-  <div class="stitle">How It Works</div>
-  <div class="info">
-    <strong>Verification:</strong> Partner must show staff ID or membership card.<br>
-    <strong>No stacking:</strong> Partner rate cannot combine with any other offer or promo.
-  </div>
-</div>
-
-<!-- ═══ CAFE ═══ -->
-<div class="section" id="cafe">
-  <div class="stitle">Cafe</div>
-
-  <table>
-    <thead><tr><th>Item</th><th>Price</th></tr></thead>
-    <tbody>
-      <tr><td>Daily Brew (cold brew coffee)</td><td class="price">$5</td></tr>
-      <tr><td>Premium Brew (cold brew coffee)</td><td class="price">$8</td></tr>
-      <tr><td>House Tea (hot or cold brew)</td><td class="price">$7</td></tr>
-      <tr><td>Signature Tea (hot or cold brew)</td><td class="price">$8</td></tr>
+      <tr><td>Signature Tea (hot / cold)</td><td class="price">$8</td></tr>
       <tr><td>Signature Matcha</td><td class="price">$8</td></tr>
       <tr><td>Purist Matcha</td><td class="price">$9</td></tr>
     </tbody>
   </table>
-  <div class="info">No discounts on cafe items.</div>
 </div>
 
-<footer>
-  House Longevity &middot; Sauna Bath House &middot; 50 Raffles Place, Singapore Land Tower<br>
-  HL: Mon-Fri 8am-8pm, Sat 10am-6pm &middot; SBH: Daily 7am-9pm<br>
-  WhatsApp: 8088 2253
-</footer>
+<h2>Assessments</h2>
+<div class="note">Launching soon — not priced publicly yet. VO2 Max · Body Composition · Grip Strength.</div>
 
-<script>
-function show(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelector(`[onclick="show('${id}')"]`).classList.add('active');
-}
-function toggleHistory(btn) {
-  btn.classList.toggle('open');
-  btn.nextElementSibling.classList.toggle('open');
-}
-</script>
+<footer>
+  <b>SBH hours</b> Daily 7am–9pm &nbsp;·&nbsp; <b>HL hours</b> Mon–Fri 8am–8pm, Sat 10am–6pm<br>
+  <b>Location</b> 50 Raffles Place, Singapore Land Tower &nbsp;·&nbsp; <b>WhatsApp</b> 8088 2253<br>
+  <span style="font-size:12px">Derived from bedrock-pricing.md. To change a price, edit bedrock first, then regenerate this page.</span>
+</footer>
+</div>
 </body>
 </html>
